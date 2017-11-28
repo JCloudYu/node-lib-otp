@@ -17,7 +17,7 @@
 	
 	
 	
-		otp.TOTPUseBN = true;
+		otp.TOTPUseBN = false;
 		process.stdout.write( "Testing builtin integer environment...\n" );
 		process.stdout.write( "    Testing directly assigned secret... " );
 		result = otp({ label:'abc', secret:base32.decode('JBSWY3DPEHPK3PXP')}).totp({
@@ -29,7 +29,7 @@
 		result = otp( 'otpauth://totp/user@host.com?secret=JBSWY3DPEHPK3PXP' ).totp({
 			length:6, time:testTime
 		});
-		process.stdout.write( `${result === answer ? "passed!" : "failed"}\n` );
+		process.stdout.write( `${result === answer ? "passed!" : "failed"}\n\n` );
 		
 		
 		
