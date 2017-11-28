@@ -1,0 +1,32 @@
+{
+	"name": "lib-otp",
+	"engines": {
+		"node": ">=6.4.0"
+	},
+	"version": "0.1.0",
+	"description": "Yep! This is an another OTP library...",
+	"main": "otp.js",
+	"scripts": {
+		"test": "node test.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/JCloudYu/node-lib-otp.git"
+	},
+	"keywords": [
+		"OTP",
+		"TOTP",
+		"HOTP"
+	],
+	"author": "JCloudYu",
+	"license": "WTFPL",
+	"bugs": {
+		"url": "https://github.com/JCloudYu/node-lib-otp/issues"
+	},
+	"homepage": "https://github.com/JCloudYu/node-lib-otp#readme",
+	"dependencies": {
+		"base32": "0.0.6",
+		"moment": "^2.19.2",
+		"thirty-two": "^1.0.2"
+	}
+}
