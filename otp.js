@@ -152,9 +152,16 @@
 		}
 	}
 	
+	/**
+	 * The short otp object factory
+	 * @param conf
+	 * @returns {OTPObj}
+	 * @constructor
+	 */
 	function OTP(conf) {
 		return new OTPObj(conf);
 	}
 	
+	OTP.OTPObj = OTPObj;
 	module.exports = OTP;
 })();
