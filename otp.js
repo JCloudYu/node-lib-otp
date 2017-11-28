@@ -10,6 +10,7 @@
 	const crypto = require( 'crypto' );
 	const base32 = require( 'thirty-two' );
 	const moment = require( 'moment' );
+	const bignum = require( 'bn.js' );
 	
 	
 	
@@ -138,8 +139,15 @@
 				time = moment();
 			}
 			
-			let buff = Buffer.alloc(4);
-			buff.writeUInt32BE((time.unix()/this.timeSlice)|0);
+			let buff;
+			if ( !OTP.TOTPUseBN ) {
+				buff = Buffer.alloc(4);
+				buff.writeUInt32BE((time.unix()/this.timeSlice)|0);
+			}
+			else {
+				let bn = (new bignum(Math.floor(time.unix()/this.timeSlice)));
+				buff = bn.toArrayLike(Buffer, 'be', 8);
+			}
 			return this.hotp(buff, length);
 		}
 		hotpURI(){
@@ -162,6 +170,7 @@
 		return new OTPObj(conf);
 	}
 	
+	OTP.TOTPUseBN = true;
 	OTP.OTPObj = OTPObj;
 	module.exports = OTP;
 })();

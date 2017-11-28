@@ -15,8 +15,18 @@
 		const answer	= '711318';
 		let result;
 	
-		process.stdout.write( "Testing directly assigned secret... " );
+	
+	
+		otp.TOTPUseBN = true;
+		process.stdout.write( "Testing builtin integer environment...\n" );
+		process.stdout.write( "    Testing directly assigned secret... " );
 		result = otp({ label:'abc', secret:base32.decode('JBSWY3DPEHPK3PXP')}).totp({
+			length:6, time:testTime
+		});
+		process.stdout.write( `${result === answer ? "passed!" : "failed"}\n` );
+		
+		process.stdout.write( "    Testing otpauth uri... " );
+		result = otp( 'otpauth://totp/user@host.com?secret=JBSWY3DPEHPK3PXP' ).totp({
 			length:6, time:testTime
 		});
 		process.stdout.write( `${result === answer ? "passed!" : "failed"}\n` );
@@ -24,8 +34,17 @@
 		
 		
 		
-	
-		process.stdout.write( "Testing otpauth uri... " );
+		
+		
+		otp.TOTPUseBN = true;
+		process.stdout.write( "Testing bignumber environment...\n" );
+		process.stdout.write( "    Testing directly assigned secret... " );
+		result = otp({ label:'abc', secret:base32.decode('JBSWY3DPEHPK3PXP')}).totp({
+			length:6, time:testTime
+		});
+		process.stdout.write( `${result === answer ? "passed!" : "failed"}\n` );
+		
+		process.stdout.write( "    Testing otpauth uri... " );
 		result = otp( 'otpauth://totp/user@host.com?secret=JBSWY3DPEHPK3PXP' ).totp({
 			length:6, time:testTime
 		});
