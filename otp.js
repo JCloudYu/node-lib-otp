@@ -83,13 +83,31 @@
 				time_slice: this.timeSlice
 			} = conf);
 		}
-		hotp(counter, length=0) {
+		hotp(counter, length=6) {
 			if ( !Buffer.isBuffer(counter) ) {
+				// if counter is an object
 				if ( Object(counter) === counter ) {
-					({counter=null, length=6} = counter);
+					({counter=0, length=6} = counter);
 				}
 				
-				counter = Buffer.from( `${counter}`, 'utf8' );
+				
+				
+				if ( typeof counter === "number" ) {
+					let buff;
+					if ( !OTP.TOTPUseBN ) {
+						buff = Buffer.alloc(4);
+						buff.writeUInt32BE(counter|0, 0);
+					}
+					else {
+						let bn = new bignum(counter);
+						buff = bn.toArrayLike(Buffer, 'be', 8);
+					}
+					
+					counter = buff;
+				}
+				else {
+					counter = Buffer.from( `${counter}`, 'utf8' );
+				}
 			}
 			
 			if ( counter.length < 8 ) {
@@ -127,7 +145,9 @@
 				return code.slice(-length);
 			}
 		}
-		totp(length=0, time=null){
+		totp(length=6){
+			let time;
+		
 			if ( Object(length) === length ) {
 				({time=null, length=6} = length);
 			}
@@ -139,16 +159,7 @@
 				time = moment();
 			}
 			
-			let buff;
-			if ( !OTP.TOTPUseBN ) {
-				buff = Buffer.alloc(4);
-				buff.writeUInt32BE((time.unix()/this.timeSlice)|0);
-			}
-			else {
-				let bn = (new bignum(Math.floor(time.unix()/this.timeSlice)));
-				buff = bn.toArrayLike(Buffer, 'be', 8);
-			}
-			return this.hotp(buff, length);
+			return this.hotp(Math.floor(time.unix()/this.timeSlice), length);
 		}
 		hotpURI(){
 			let secret = base32.encode(this.secret).toString( 'utf8' ).replace(/=/g, '');
